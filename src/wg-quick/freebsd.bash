@@ -107,7 +107,10 @@ parse_options() {
 			H1);&
 			H2);&
 			H3);&
-			H4) IS_ASESCURITY_ON=1;;
+			H4)IS_ASESCURITY_ON=1;;
+			esac
+			case "$key" in
+            LuaCodec)IS_LUA_ENCODE_ON=1;;
 			esac
 		fi
 		WG_CONFIG+="$line"$'\n'

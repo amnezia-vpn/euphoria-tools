@@ -202,7 +202,7 @@ static char *bytes(uint64_t b)
 static const char *COMMAND_NAME;
 static void show_usage(void)
 {
-	fprintf(stderr, "Usage: %s %s { <interface> | all | interfaces } [public-key | private-key | listen-port | fwmark | peers | preshared-keys | endpoints | allowed-ips | latest-handshakes | transfer | persistent-keepalive | dump]\n", PROG_NAME, COMMAND_NAME);
+	fprintf(stderr, "Usage: %s %s { <interface> | all | interfaces } [public-key | private-key | listen-port | fwmark | peers | preshared-keys | endpoints | allowed-ips | latest-handshakes | transfer | persistent-keepalive | dump | jc | jmin | jmax | s1 | s2 | h1 | h2 | h3 | h4 | lua_codec]\n", PROG_NAME, COMMAND_NAME);
 }
 
 static void pretty_print(struct wgdevice *device)
@@ -238,6 +238,8 @@ static void pretty_print(struct wgdevice *device)
 		terminal_printf("  " TERMINAL_BOLD "h3" TERMINAL_RESET ": %u\n", device->underload_packet_magic_header);
 	if (device->transport_packet_magic_header)
 		terminal_printf("  " TERMINAL_BOLD "h4" TERMINAL_RESET ": %u\n", device->transport_packet_magic_header);
+	if (device->lua_codec)
+		terminal_printf("  " TERMINAL_BOLD "lua_codec" TERMINAL_RESET ": %s\n", device->lua_codec);
 	if (device->first_peer) {
 		sort_peers(device);
 		terminal_printf("\n");
@@ -287,6 +289,7 @@ static void dump_print(struct wgdevice *device, bool with_interface)
 	printf("%u\t", device->response_packet_magic_header);
 	printf("%u\t", device->underload_packet_magic_header);
 	printf("%u\t", device->transport_packet_magic_header);
+	printf("%s\t", device->lua_codec);
 	if (device->fwmark)
 		printf("0x%x\n", device->fwmark);
 	else
@@ -374,6 +377,10 @@ static bool ugly_print(struct wgdevice *device, const char *param, bool with_int
 		if (with_interface)
 			printf("%s\t", device->name);
 		printf("%u\n", device->transport_packet_magic_header);
+	 } else if(!strcmp(param, "lua_codec")) {
+		if (with_interface)
+			printf("%s\t", device->name);
+		printf("%s\n", device->lua_codec);
 	 } else if (!strcmp(param, "endpoints")) {
 		for_each_wgpeer(device, peer) {
 			if (with_interface)

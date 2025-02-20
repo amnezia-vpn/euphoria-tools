@@ -28,6 +28,7 @@ CONFIG_FILE=""
 PROGRAM="${0##*/}"
 ARGS=( "$@" )
 IS_ASESCURITY_ON=0
+IS_LUA_ENCODE_ON=0
 
 cmd() {
 	echo "[#] $*" >&3
@@ -78,8 +79,11 @@ parse_options() {
 			H1);&
 			H2);&
 			H3);&
-			H4) IS_ASESCURITY_ON=1;;
+			H4)IS_ASESCURITY_ON=1;;
 			esac
+			case "$key" in
+            LuaCodec)IS_LUA_ENCODE_ON=1;;
+            esac
 		fi
 		WG_CONFIG+="$line"$'\n'
 	done < "$CONFIG_FILE"
@@ -118,8 +122,8 @@ add_if() {
 	while true; do
 		local -A existing_ifs="( $(wg show interfaces | sed 's/\([^ ]*\)/[\1]=1/g') )"
 		local index ret
-		if [[ $IS_ASESCURITY_ON == 1 ]]; then
-			cmd "amneziawg-go "$INTERFACE"";
+		if [[ $IS_ASESCURITY_ON -eq 1 || $IS_LUA_ENCODE_ON -eq 1 ]]; then
+			cmd "amneziawg-go \"$INTERFACE\"";
 			return $?
 		else
 			for ((index=0; index <= 2147483647; ++index)); do [[ -v existing_ifs[wg$index] ]] || break; done

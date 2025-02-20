@@ -57,6 +57,7 @@ enum wgdevice_attribute {
 	WGDEVICE_A_H2,
 	WGDEVICE_A_H3,
 	WGDEVICE_A_H4,
+    WGDEVICE_A_LUA_CODEC,
 	__WGDEVICE_A_LAST
 };
 

@@ -69,6 +69,8 @@ static int userspace_set_device(struct wgdevice *dev)
 		fprintf(f, "h3=%u\n", dev->underload_packet_magic_header);
 	if (dev->flags & WGDEVICE_HAS_H4)
 		fprintf(f, "h4=%u\n", dev->transport_packet_magic_header);
+	if (dev->flags & WGDEVICE_HAS_LUA_CODEC)
+		fprintf(f, "lua_codec=%s\n", dev->lua_codec);
 
 	for_each_wgpeer(dev, peer) {
 		key_to_hex(hex, peer->public_key);
@@ -192,6 +194,7 @@ static int userspace_get_device(struct wgdevice **out, const char *iface)
 		value = strchr(key, '=');
 		if (!value || line_len == 0 || key[line_len - 1] != '\n')
 			break;
+
 		*value++ = key[--line_len] = '\0';
 
 		if (!peer && !strcmp(key, "private_key")) {
@@ -232,6 +235,9 @@ static int userspace_get_device(struct wgdevice **out, const char *iface)
 		} else if(!peer && !strcmp(key, "h4")) {
 			dev->transport_packet_magic_header = NUM(0xffffffffU);
 			dev->flags |= WGDEVICE_HAS_H4;
+		} else if(!peer && !strcmp(key, "lua_codec")) {
+            dev->lua_codec = strdup(value);
+			dev->flags |= WGDEVICE_HAS_LUA_CODEC;
 		} else if (!strcmp(key, "public_key")) {
 			struct wgpeer *new_peer = calloc(1, sizeof(*new_peer));
 

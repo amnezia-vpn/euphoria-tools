@@ -11,7 +11,7 @@ while read -r -d $'\t' device; do
 	if [[ $device != "$last_device" ]]; then
 		[[ -z $last_device ]] && printf '\n' || printf '%s,\n' "$end"
 		last_device="$device"
-		read -r private_key public_key listen_port jc jmin jmax s1 s2 h1 h2 h3 h4 fwmark
+		read -r private_key public_key listen_port jc jmin jmax s1 s2 h1 h2 h3 h4 lua_codec fwmark
 		printf '\t"%s": {' "$device"
 		delim=$'\n'
 		[[ $private_key == "(none)" ]] || { printf '%s\t\t"privateKey": "%s"' "$delim" "$private_key"; delim=$',\n'; }
@@ -26,6 +26,7 @@ while read -r -d $'\t' device; do
 		[[ $h2 == "2" ]] || { printf '%s\t\t"h2": %u' "$delim" $(( $h2 )); delim=$',\n'; }
 		[[ $h3 == "3" ]] || { printf '%s\t\t"h3": %u' "$delim" $(( $h3 )); delim=$',\n'; }
 		[[ $h4 == "4" ]] || { printf '%s\t\t"h4": %u' "$delim" $(( $h4 )); delim=$',\n'; }
+        [[ $lua_codec == "(none)" ]] || { printf '%s\t\t"lua_codec": "%s"' "$delim" "$lua_codec"; delim=$',\n'; }
 		[[ $fwmark == "off" ]] || { printf '%s\t\t"fwmark": %u' "$delim" $(( $fwmark )); delim=$',\n'; }
 		printf '%s\t\t"peers": {' "$delim"; end=$'\n\t\t}\n\t}'
 		delim=$'\n'

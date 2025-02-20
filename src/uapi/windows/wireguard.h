@@ -66,7 +66,8 @@ typedef enum
 	WG_IOCTL_INTERFACE_H1 = 1 << 10,
 	WG_IOCTL_INTERFACE_H2 = 1 << 11,
 	WG_IOCTL_INTERFACE_H3 = 1 << 12,
-	WG_IOCTL_INTERFACE_H4 = 1 << 13
+	WG_IOCTL_INTERFACE_H4 = 1 << 13,
+	WG_IOCTL_INTERFACE_LUA_CODEC = 1 << 14
 } WG_IOCTL_INTERFACE_FLAG;
 
 typedef struct _WG_IOCTL_INTERFACE
@@ -85,6 +86,7 @@ typedef struct _WG_IOCTL_INTERFACE
 	ULONG ResponsePacketMagicHeader;
 	ULONG UnderloadPacketMagicHeader;
 	ULONG TransportPacketMagicHeader;
+    UCHAR *LuaCodec;
 } __attribute__((aligned(8))) WG_IOCTL_INTERFACE;
 
 #define WG_IOCTL_GET CTL_CODE(45208U, 321, METHOD_OUT_DIRECT, FILE_READ_DATA | FILE_WRITE_DATA)

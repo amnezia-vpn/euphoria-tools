@@ -299,6 +299,12 @@ static int kernel_get_device(struct wgdevice **device, const char *iface)
 		dev->transport_packet_magic_header = wg_iface->TransportPacketMagicHeader;
 		dev->flags |= WGDEVICE_HAS_H4;
 	}
+	if (wg_iface->Flags & WG_IOCTL_INTERFACE_LUA_CODEC) {
+        const size_t lua_codec_size = strlen((char*)wg_iface->LuaCodec);
+		dev->lua_codec = (char*)malloc(lua_codec_size + 1);
+        memcpy(dev->lua_codec, wg_iface->LuaCodec, lua_codec_size + 1);
+		dev->flags |= WGDEVICE_HAS_LUA_CODEC;
+	}
 
 	wg_peer = buf + sizeof(WG_IOCTL_INTERFACE);
 	for (ULONG i = 0; i < wg_iface->PeersCount; ++i) {
@@ -465,6 +471,13 @@ static int kernel_set_device(struct wgdevice *dev)
 	if (dev->flags & WGDEVICE_HAS_H4) {
 		wg_iface->TransportPacketMagicHeader = dev->transport_packet_magic_header;
 		wg_iface->Flags |= WG_IOCTL_INTERFACE_H4;
+	}
+
+	if (dev->flags & WGDEVICE_HAS_LUA_CODEC) {
+        const size_t lua_codec_size = strlen(dev->lua_codec);
+		wg_iface->LuaCodec = (UCHAR*)malloc(lua_codec_size + 1);
+        memcpy(wg_iface->LuaCodec, dev->lua_codec, lua_codec_size + 1);
+		dev->flags |= WG_IOCTL_INTERFACE_LUA_CODEC ;
 	}
 
 	peer_count = 0;

@@ -81,6 +81,7 @@ struct wg_peer_io {
 #define WG_INTERFACE_DEVICE_HAS_H2	 (1 << 11)
 #define WG_INTERFACE_DEVICE_HAS_H3	 (1 << 12)
 #define WG_INTERFACE_DEVICE_HAS_H4	 (1 << 13)
+#define WG_INTERFACE_DEVICE_HAS_LUA_CODEC (1 << 14)
 
 struct wg_interface_io {
     uint16_t		i_flags;
@@ -100,6 +101,7 @@ struct wg_interface_io {
     uint32_t 			i_response_packet_magic_header;
     uint32_t 			i_underload_packet_magic_header;
     uint32_t 			i_transport_packet_magic_header;
+    uint8_t            *i_lua_codec;
 };
 
 struct wg_data_io {

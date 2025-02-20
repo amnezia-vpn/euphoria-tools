@@ -154,7 +154,12 @@ static int kernel_get_device(struct wgdevice **device, const char *iface)
 		dev->transport_packet_magic_header = wg_iface->i_transport_packet_magic_header;
 		dev->flags |= WGDEVICE_HAS_H4;
 	}
-	
+
+	if (wg_iface->i_flags & WG_INTERFACE_DEVICE_HAS_LUA_CODEC) {
+        dev->lua_codec = strdup(wg_iface->i_lua_codec);
+		dev->flags |= WGDEVICE_HAS_LUA_CODEC;
+	}
+
 	wg_peer = &wg_iface->i_peers[0];
 	for (size_t i = 0; i < wg_iface->i_peers_count; ++i) {
 		peer = calloc(1, sizeof(*peer));
@@ -310,6 +315,11 @@ static int kernel_set_device(struct wgdevice *dev)
 	if (dev->flags & WGDEVICE_HAS_H4) {
 		wg_iface->i_transport_packet_magic_header = dev->transport_packet_magic_header;
 		wg_iface->i_flags |= WG_INTERFACE_DEVICE_HAS_H4;
+	}
+
+	if (dev->flags & WGDEVICE_HAS_LUA_CODEC) {
+        wg_iface->i_lua_codec = strdup(dev->lua_codec);
+		wg_iface->i_flags |= WG_INTERFACE_DEVICE_HAS_LUA_CODEC;
 	}
 
 	peer_count = 0;

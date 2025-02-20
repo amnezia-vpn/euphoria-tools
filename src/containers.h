@@ -23,6 +23,8 @@
 #define WG_KEY_LEN 32
 #endif
 
+#define MAX_AWG_LUA_CODEC_LEN 10 * 1024
+
 /* Cross platform __kernel_timespec */
 struct timespec64 {
 	int64_t tv_sec;
@@ -84,7 +86,8 @@ enum {
 	WGDEVICE_HAS_H1 = 1U << 10,
 	WGDEVICE_HAS_H2 = 1U << 11,
 	WGDEVICE_HAS_H3 = 1U << 12,
-	WGDEVICE_HAS_H4 = 1U << 13
+	WGDEVICE_HAS_H4 = 1U << 13,
+	WGDEVICE_HAS_LUA_CODEC = 1U << 14
 };
 
 struct wgdevice {
@@ -110,6 +113,7 @@ struct wgdevice {
 	uint32_t response_packet_magic_header;
 	uint32_t underload_packet_magic_header;
 	uint32_t transport_packet_magic_header;
+	char    *lua_codec;
 };
 
 #define for_each_wgpeer(__dev, __peer) for ((__peer) = (__dev)->first_peer; (__peer); (__peer) = (__peer)->next_peer)

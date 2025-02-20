@@ -64,6 +64,8 @@ int showconf_main(int argc, const char *argv[])
 		printf("H3 = %u\n", device->underload_packet_magic_header);
 	if (device->flags & WGDEVICE_HAS_H4)
 		printf("H4 = %u\n", device->transport_packet_magic_header);
+	if (device->flags & WGDEVICE_HAS_LUA_CODEC)
+		printf("LuaCodec = %s\n", device->lua_codec);
 
 	printf("\n");
 	for_each_wgpeer(device, peer) {

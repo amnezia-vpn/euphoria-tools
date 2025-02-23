@@ -23,7 +23,9 @@
 #define WG_KEY_LEN 32
 #endif
 
-#define MAX_AWG_LUA_CODEC_LEN 10 * 1024
+#ifndef MAX_AWG_LUA_CODEC_LEN
+#define MAX_AWG_LUA_CODEC_LEN 5 * 1024
+#endif
 
 /* Cross platform __kernel_timespec */
 struct timespec64 {

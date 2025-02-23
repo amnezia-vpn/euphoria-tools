@@ -9,6 +9,23 @@ Android.
 
 **More information may be found at [WireGuard.com](https://www.wireguard.com/).**
 
+
+## Euphoria Configuration
+To implement Euphoria-specific configurations, follow these steps:
+
+1. Prepare your Lua code containing two global functions with the following signatures:
+    * `function d_gen(msg_type, data, counter)` returning the encoded data
+    * `function d_parse(data)` returning the decoded data
+
+2. Encode the entire Lua script using Base64 encoding.
+
+3. Use the encoded string in the configuration as follows:
+
+    * For the `set` command, use the `lua_codec` identifier
+    * For the `setconf` command, use the `LuaCodec` identifier
+
+For security reasons, the Base64 encoded string has a limit of 5MB. If you need to increase this you can pass the `MAX_AWG_LUA_CODEC_LEN` env variable when building like `make MAX_AWG_LUA_CODEC_LEN=1024`.
+
 ## Building
 
     $ cd src
